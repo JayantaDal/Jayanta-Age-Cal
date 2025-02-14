@@ -7,237 +7,204 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #000000;
+            background-color: black;
             color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
             margin: 0;
             padding: 20px;
-            min-height: 100vh;
-        }
-        .header {
-            background-color: #00b894;
-            padding: 15px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            font-size: 24px;
-            display: flex;
-            align-items: center;
-        }
-        .back-arrow {
-            color: white;
-            text-decoration: none;
-            margin-right: 15px;
-            font-size: 28px;
         }
         .container {
-            margin-top: 80px;
-            padding: 20px;
+            width: 100%;
+            max-width: 500px;
+            padding: 2rem;
         }
-        .date-section {
-            background-color: #1e272e;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
         }
-        .date-label {
-            font-size: 20px;
-            margin-bottom: 10px;
-            color: #ffffff;
+        .input-group {
+            margin-bottom: 2rem;
         }
-        .date-value {
-            font-size: 24px;
-            color: #ffffff;
+        label {
+            display: block;
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
         }
-        .calendar-icon {
-            color: #666;
-            font-size: 24px;
-        }
-        .button-container {
-            display: flex;
-            gap: 15px;
-            margin: 20px 0;
-        }
-        .btn {
-            flex: 1;
-            padding: 15px;
-            font-size: 20px;
+        input {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.4rem;
+            background-color: #333;
             border: none;
-            border-radius: 10px;
-            cursor: pointer;
+            border-radius: 5px;
+            color: white;
+            box-sizing: border-box;
         }
-        .btn-clear {
-            background-color: transparent;
-            color: #00b894;
-            border: 2px solid #00b894;
-        }
-        .btn-calculate {
+        button {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.4rem;
             background-color: #00b894;
             color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+        button:hover {
+            background-color: #00a085;
         }
         .result-section {
-            background-color: #1e272e;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 15px 0;
+            margin-top: 2rem;
+            padding: 1rem;
+            background-color: #333;
+            border-radius: 5px;
         }
         .result-title {
-            font-size: 24px;
-            margin-bottom: 15px;
-        }
-        .result-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            text-align: center;
-        }
-        .result-label {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
             color: #00b894;
-            font-size: 16px;
-            margin-bottom: 5px;
         }
-        .result-value {
-            font-size: 36px;
-            font-weight: bold;
-        }
-        select {
-            background-color: transparent;
-            color: white;
-            border: none;
-            font-size: 24px;
-            padding: 5px;
-            margin: 0 5px;
-        }
-        option {
-            background-color: #1e272e;
-            color: white;
+        .result-content {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <a href="#" class="back-arrow">←</a>
-        Age Calculator
-    </div>
-
     <div class="container">
-        <div>
-            <div class="date-label">Today's Date</div>
-            <div class="date-section">
-                <div class="date-value" id="today-date">13 - 02 - 2025</div>
-                <div class="calendar-icon">📅</div>
-            </div>
+        <h1>Age Calculator</h1>
+
+        <div class="input-group">
+            <label>Today's Date:</label>
+            <input type="text" id="today-date" placeholder="DD-MM-YYYY" maxlength="10">
         </div>
 
-        <div>
-            <div class="date-label">Date of Birth</div>
-            <div class="date-section">
-                <div class="date-value">
-                    <select id="day"></select> -
-                    <select id="month"></select> -
-                    <select id="year"></select>
-                </div>
-                <div class="calendar-icon">📅</div>
-            </div>
+        <div class="input-group">
+            <label>Date of Birth:</label>
+            <input type="text" id="birth-date" placeholder="DD-MM-YYYY" maxlength="10">
         </div>
 
-        <div class="button-container">
-            <button class="btn btn-clear" onclick="clearFields()">Clear</button>
-            <button class="btn btn-calculate" onclick="calculateAge()">Calculate</button>
+        <button onclick="calculateAge()">Calculate Age</button>
+        <button onclick="resetForm()" style="background-color: #666;">Reset</button>
+
+        <div class="result-section">
+            <div class="result-title">Your Age</div>
+            <div class="result-content" id="age-result">0 Years, 0 Months, 0 Days</div>
         </div>
 
-        <div>
-            <div class="date-label">Your Age</div>
-            <div class="result-section">
-                <div class="result-grid">
-                    <div>
-                        <div class="result-label">YEARS</div>
-                        <div class="result-value" id="years">00</div>
-                    </div>
-                    <div>
-                        <div class="result-label">MONTHS</div>
-                        <div class="result-value" id="months">00</div>
-                    </div>
-                    <div>
-                        <div class="result-label">DAYS</div>
-                        <div class="result-value" id="days">00</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div>
-            <div class="date-label">Next Birthday</div>
-            <div class="result-section">
-                <div class="result-grid" style="grid-template-columns: 1fr 1fr;">
-                    <div>
-                        <div class="result-label">MONTHS</div>
-                        <div class="result-value" id="next-months">00</div>
-                    </div>
-                    <div>
-                        <div class="result-label">DAYS</div>
-                        <div class="result-value" id="next-days">00</div>
-                    </div>
-                </div>
-            </div>
+        <div class="result-section">
+            <div class="result-title">Next Birthday</div>
+            <div class="result-content" id="next-birthday">0 Months, 0 Days</div>
         </div>
     </div>
 
     <script>
-        // Get current date
+        // Set today's date by default
+        function formatDate(date) {
+            return `${date.getDate().toString().padStart(2, '0')}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getFullYear()}`;
+        }
+
         const today = new Date();
-        const currentDay = today.getDate();
-        const currentMonth = today.getMonth() + 1;
-        const currentYear = today.getFullYear();
+        document.getElementById('today-date').value = formatDate(today);
 
-        // Update today's date display
-        document.getElementById('today-date').textContent = 
-            `${currentDay.toString().padStart(2, '0')} - ${currentMonth.toString().padStart(2, '0')} - ${currentYear}`;
+        // Improved input mask function for date format
+        function maskDate(input) {
+            input.addEventListener('keypress', function(e) {
+                // Allow only numbers and hyphen
+                if (!/[\d-]/.test(e.key)) {
+                    e.preventDefault();
+                }
+                
+                // Add hyphen automatically
+                if (e.target.value.length === 2 || e.target.value.length === 5) {
+                    if (e.key !== '-') {
+                        e.target.value += '-';
+                    }
+                }
+            });
 
-        // Populate day dropdown
-        const daySelect = document.getElementById('day');
-        for (let i = 1; i <= 31; i++) {
-            const option = document.createElement('option');
-            option.value = i;
-            option.text = i.toString().padStart(2, '0');
-            if (i === currentDay) option.selected = true;
-            daySelect.appendChild(option);
+            input.addEventListener('input', function(e) {
+                let value = e.target.value;
+                
+                // Remove any non-digits and non-hyphens
+                value = value.replace(/[^\d-]/g, '');
+                
+                // Split the value into parts
+                const parts = value.split('-');
+                
+                // Format each part to ensure proper length
+                if (parts[0] && parts[0].length > 2) parts[0] = parts[0].substring(0, 2);
+                if (parts[1] && parts[1].length > 2) parts[1] = parts[1].substring(0, 2);
+                if (parts[2] && parts[2].length > 4) parts[2] = parts[2].substring(0, 4);
+                
+                // Rejoin with hyphens
+                value = parts.join('-');
+                
+                // Ensure the total length doesn't exceed 10 characters (DD-MM-YYYY)
+                if (value.length > 10) {
+                    value = value.substring(0, 10);
+                }
+                
+                e.target.value = value;
+            });
+
+            // Validate date on blur
+            input.addEventListener('blur', function(e) {
+                const value = e.target.value;
+                if (value) {
+                    const [day, month, year] = value.split('-').map(Number);
+                    
+                    // Check if month is valid
+                    if (month < 1 || month > 12) {
+                        alert('Please enter a valid month (01-12)');
+                        return;
+                    }
+                    
+                    // Check if day is valid for the given month
+                    const lastDayOfMonth = new Date(year, month, 0).getDate();
+                    if (day < 1 || day > lastDayOfMonth) {
+                        alert(`Please enter a valid day (01-${lastDayOfMonth}) for the selected month`);
+                        return;
+                    }
+                }
+            });
         }
 
-        // Populate month dropdown
-        const monthSelect = document.getElementById('month');
-        for (let i = 1; i <= 12; i++) {
-            const option = document.createElement('option');
-            option.value = i;
-            option.text = i.toString().padStart(2, '0');
-            if (i === currentMonth) option.selected = true;
-            monthSelect.appendChild(option);
-        }
-
-        // Populate year dropdown
-        const yearSelect = document.getElementById('year');
-        for (let i = currentYear; i >= 1900; i--) {
-            const option = document.createElement('option');
-            option.value = i;
-            option.text = i;
-            if (i === currentYear) option.selected = true;
-            yearSelect.appendChild(option);
-        }
+        // Apply mask to both inputs
+        maskDate(document.getElementById('today-date'));
+        maskDate(document.getElementById('birth-date'));
 
         function calculateAge() {
-            const birthDay = parseInt(daySelect.value);
-            const birthMonth = parseInt(monthSelect.value);
-            const birthYear = parseInt(yearSelect.value);
+            const todayStr = document.getElementById('today-date').value;
+            const birthStr = document.getElementById('birth-date').value;
 
-            const birthDate = new Date(birthYear, birthMonth - 1, birthDay);
-            const today = new Date();
+            // Validate date format
+            if (!todayStr.match(/^\d{2}-\d{2}-\d{4}$/) || !birthStr.match(/^\d{2}-\d{2}-\d{4}$/)) {
+                alert('Please enter dates in DD-MM-YYYY format');
+                return;
+            }
 
-            let years = today.getFullYear() - birthDate.getFullYear();
-            let months = today.getMonth() - birthDate.getMonth();
-            let days = today.getDate() - birthDate.getDate();
+            // Convert strings to dates
+            const [tDay, tMonth, tYear] = todayStr.split('-').map(Number);
+            const [bDay, bMonth, bYear] = birthStr.split('-').map(Number);
+
+            const todayDate = new Date(tYear, tMonth - 1, tDay);
+            const birthDate = new Date(bYear, bMonth - 1, bDay);
+
+            if (birthDate > todayDate) {
+                alert('Date of birth cannot be in the future!');
+                return;
+            }
+
+            // Calculate age
+            let years = todayDate.getFullYear() - birthDate.getFullYear();
+            let months = todayDate.getMonth() - birthDate.getMonth();
+            let days = todayDate.getDate() - birthDate.getDate();
 
             if (months < 0 || (months === 0 && days < 0)) {
                 years--;
@@ -245,38 +212,34 @@
             }
 
             if (days < 0) {
-                const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, birthDate.getDate());
-                days = Math.floor((today - lastMonth) / (1000 * 60 * 60 * 24));
+                const lastMonth = new Date(todayDate.getFullYear(), todayDate.getMonth() - 1, 0);
+                days += lastMonth.getDate();
                 months--;
             }
 
             // Calculate next birthday
-            let nextBirthday = new Date(today.getFullYear(), birthMonth - 1, birthDay);
-            if (nextBirthday < today) {
-                nextBirthday.setFullYear(today.getFullYear() + 1);
+            let nextBirthday = new Date(todayDate.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+            if (nextBirthday < todayDate) {
+                nextBirthday.setFullYear(nextBirthday.getFullYear() + 1);
             }
-            const timeToNextBirthday = nextBirthday - today;
-            const daysToNextBirthday = Math.floor(timeToNextBirthday / (1000 * 60 * 60 * 24));
-            const monthsToNextBirthday = Math.floor(daysToNextBirthday / 30);
-            const remainingDays = daysToNextBirthday % 30;
 
-            // Update display
-            document.getElementById('years').textContent = years.toString().padStart(2, '0');
-            document.getElementById('months').textContent = months.toString().padStart(2, '0');
-            document.getElementById('days').textContent = days.toString().padStart(2, '0');
-            document.getElementById('next-months').textContent = monthsToNextBirthday.toString().padStart(2, '0');
-            document.getElementById('next-days').textContent = remainingDays.toString().padStart(2, '0');
+            const diffTime = Math.abs(nextBirthday - todayDate);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            const nextMonths = Math.floor(diffDays / 30);
+            const nextDays = diffDays % 30;
+
+            // Display results
+            document.getElementById('age-result').textContent = 
+                `${years} Years, ${months} Months, ${days} Days`;
+            document.getElementById('next-birthday').textContent = 
+                `${nextMonths} Months, ${nextDays} Days`;
         }
 
-        function clearFields() {
-            daySelect.value = currentDay;
-            monthSelect.value = currentMonth;
-            yearSelect.value = currentYear;
-            document.getElementById('years').textContent = '00';
-            document.getElementById('months').textContent = '00';
-            document.getElementById('days').textContent = '00';
-            document.getElementById('next-months').textContent = '00';
-            document.getElementById('next-days').textContent = '00';
+        function resetForm() {
+            document.getElementById('today-date').value = formatDate(new Date());
+            document.getElementById('birth-date').value = '';
+            document.getElementById('age-result').textContent = '0 Years, 0 Months, 0 Days';
+            document.getElementById('next-birthday').textContent = '0 Months, 0 Days';
         }
     </script>
 </body>
