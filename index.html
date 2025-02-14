@@ -1,246 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Age Calculator</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: black;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            width: 100%;
-            max-width: 500px;
-            padding: 2rem;
-        }
-        h1 {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-        }
-        .input-group {
-            margin-bottom: 2rem;
-        }
-        label {
-            display: block;
-            font-size: 1.4rem;
-            margin-bottom: 0.5rem;
-        }
-        input {
-            width: 100%;
-            padding: 1rem;
-            font-size: 1.4rem;
-            background-color: #333;
-            border: none;
-            border-radius: 5px;
-            color: white;
-            box-sizing: border-box;
-        }
-        button {
-            width: 100%;
-            padding: 1rem;
-            font-size: 1.4rem;
-            background-color: #00b894;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-bottom: 1rem;
-        }
-        button:hover {
-            background-color: #00a085;
-        }
-        .result-section {
-            margin-top: 2rem;
-            padding: 1rem;
-            background-color: #333;
-            border-radius: 5px;
-        }
-        .result-title {
-            font-size: 1.4rem;
-            margin-bottom: 1rem;
-            color: #00b894;
-        }
-        .result-content {
-            font-size: 1.8rem;
-            margin-bottom: 0.5rem;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Age Calculator</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      text-align: center;
+    }
+
+    .large-font {
+      font-size: 24px;
+    }
+
+    .normal-font {
+      font-size: 18px;
+    }
+
+    input {
+      font-size: 24px;
+      padding: 10px;
+      margin: 10px;
+      width: 200px;
+      text-align: center;
+      background-color: #333;
+      color: white;
+      border: 1px solid #555;
+      border-radius: 5px;
+    }
+
+    button {
+      font-size: 20px;
+      padding: 10px 20px;
+      margin: 10px;
+      background-color: green;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: darkgreen;
+    }
+
+    .result {
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Age Calculator</h1>
+  <div class="container">
+    <h1>Age Calculator</h1>
 
-        <div class="input-group">
-            <label>Today's Date:</label>
-            <input type="text" id="today-date" placeholder="DD-MM-YYYY" maxlength="10">
-        </div>
-
-        <div class="input-group">
-            <label>Date of Birth:</label>
-            <input type="text" id="birth-date" placeholder="DD-MM-YYYY" maxlength="10">
-        </div>
-
-        <button onclick="calculateAge()">Calculate Age</button>
-        <button onclick="resetForm()" style="background-color: #666;">Reset</button>
-
-        <div class="result-section">
-            <div class="result-title">Your Age</div>
-            <div class="result-content" id="age-result">0 Years, 0 Months, 0 Days</div>
-        </div>
-
-        <div class="result-section">
-            <div class="result-title">Next Birthday</div>
-            <div class="result-content" id="next-birthday">0 Months, 0 Days</div>
-        </div>
+    <!-- Today's Date -->
+    <div class="large-font">
+      <label for="todayDate">Today's Date:</label>
+      <input type="text" id="todayDate" placeholder="DD-MM-YYYY" maxlength="10">
     </div>
 
-    <script>
-        // Set today's date by default
-        function formatDate(date) {
-            return `${date.getDate().toString().padStart(2, '0')}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getFullYear()}`;
-        }
+    <!-- Date of Birth Input -->
+    <div class="large-font">
+      <label for="dob">Date of Birth (DD-MM-YYYY):</label>
+      <input type="text" id="dob" placeholder="DD-MM-YYYY" maxlength="10">
+    </div>
 
-        const today = new Date();
-        document.getElementById('today-date').value = formatDate(today);
+    <!-- Buttons -->
+    <div>
+      <button onclick="calculateAge()">Calculate Age</button>
+      <button onclick="resetForm()">Reset</button>
+    </div>
 
-        // Improved input mask function for date format
-        function maskDate(input) {
-            input.addEventListener('keypress', function(e) {
-                // Allow only numbers and hyphen
-                if (!/[\d-]/.test(e.key)) {
-                    e.preventDefault();
-                }
-                
-                // Add hyphen automatically
-                if (e.target.value.length === 2 || e.target.value.length === 5) {
-                    if (e.key !== '-') {
-                        e.target.value += '-';
-                    }
-                }
-            });
+    <!-- Results -->
+    <div class="result normal-font">
+      <p id="ageResult"></p>
+      <p id="nextBirthdayResult"></p>
+    </div>
+  </div>
 
-            input.addEventListener('input', function(e) {
-                let value = e.target.value;
-                
-                // Remove any non-digits and non-hyphens
-                value = value.replace(/[^\d-]/g, '');
-                
-                // Split the value into parts
-                const parts = value.split('-');
-                
-                // Format each part to ensure proper length
-                if (parts[0] && parts[0].length > 2) parts[0] = parts[0].substring(0, 2);
-                if (parts[1] && parts[1].length > 2) parts[1] = parts[1].substring(0, 2);
-                if (parts[2] && parts[2].length > 4) parts[2] = parts[2].substring(0, 4);
-                
-                // Rejoin with hyphens
-                value = parts.join('-');
-                
-                // Ensure the total length doesn't exceed 10 characters (DD-MM-YYYY)
-                if (value.length > 10) {
-                    value = value.substring(0, 10);
-                }
-                
-                e.target.value = value;
-            });
+  <script>
+    // Function to format date as DD-MM-YYYY
+    function formatDate(date) {
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      return `${day}-${month}-${year}`;
+    }
 
-            // Validate date on blur
-            input.addEventListener('blur', function(e) {
-                const value = e.target.value;
-                if (value) {
-                    const [day, month, year] = value.split('-').map(Number);
-                    
-                    // Check if month is valid
-                    if (month < 1 || month > 12) {
-                        alert('Please enter a valid month (01-12)');
-                        return;
-                    }
-                    
-                    // Check if day is valid for the given month
-                    const lastDayOfMonth = new Date(year, month, 0).getDate();
-                    if (day < 1 || day > lastDayOfMonth) {
-                        alert(`Please enter a valid day (01-${lastDayOfMonth}) for the selected month`);
-                        return;
-                    }
-                }
-            });
-        }
+    // Set today's date by default
+    const todayDateInput = document.getElementById('todayDate');
+    const today = new Date();
+    todayDateInput.value = formatDate(today);
 
-        // Apply mask to both inputs
-        maskDate(document.getElementById('today-date'));
-        maskDate(document.getElementById('birth-date'));
+    // Automatically add hyphens to Today's Date input
+    todayDateInput.addEventListener('input', function (e) {
+      let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+      if (value.length > 2) value = value.slice(0, 2) + '-' + value.slice(2);
+      if (value.length > 5) value = value.slice(0, 5) + '-' + value.slice(5);
+      e.target.value = value.slice(0, 10); // Limit to 10 characters
+    });
 
-        function calculateAge() {
-            const todayStr = document.getElementById('today-date').value;
-            const birthStr = document.getElementById('birth-date').value;
+    // Automatically add hyphens to DOB input
+    const dobInput = document.getElementById('dob');
+    dobInput.addEventListener('input', function (e) {
+      let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+      if (value.length > 2) value = value.slice(0, 2) + '-' + value.slice(2);
+      if (value.length > 5) value = value.slice(0, 5) + '-' + value.slice(5);
+      e.target.value = value.slice(0, 10); // Limit to 10 characters
+    });
 
-            // Validate date format
-            if (!todayStr.match(/^\d{2}-\d{2}-\d{4}$/) || !birthStr.match(/^\d{2}-\d{2}-\d{4}$/)) {
-                alert('Please enter dates in DD-MM-YYYY format');
-                return;
-            }
+    // Calculate Age and Next Birthday
+    function calculateAge() {
+      const todayValue = todayDateInput.value;
+      const dobValue = dobInput.value;
 
-            // Convert strings to dates
-            const [tDay, tMonth, tYear] = todayStr.split('-').map(Number);
-            const [bDay, bMonth, bYear] = birthStr.split('-').map(Number);
+      if (!todayValue || todayValue.length !== 10 || !dobValue || dobValue.length !== 10) {
+        alert('Please enter valid dates in DD-MM-YYYY format.');
+        return;
+      }
 
-            const todayDate = new Date(tYear, tMonth - 1, tDay);
-            const birthDate = new Date(bYear, bMonth - 1, bDay);
+      const [todayDay, todayMonth, todayYear] = todayValue.split('-').map(Number);
+      const [dobDay, dobMonth, dobYear] = dobValue.split('-').map(Number);
 
-            if (birthDate > todayDate) {
-                alert('Date of birth cannot be in the future!');
-                return;
-            }
+      const todayDate = new Date(todayYear, todayMonth - 1, todayDay);
+      const dobDate = new Date(dobYear, dobMonth - 1, dobDay);
 
-            // Calculate age
-            let years = todayDate.getFullYear() - birthDate.getFullYear();
-            let months = todayDate.getMonth() - birthDate.getMonth();
-            let days = todayDate.getDate() - birthDate.getDate();
+      if (dobDate > todayDate) {
+        alert('Date of birth cannot be in the future.');
+        return;
+      }
 
-            if (months < 0 || (months === 0 && days < 0)) {
-                years--;
-                months += 12;
-            }
+      // Calculate Age in Years, Months, and Days
+      let ageYears = todayDate.getFullYear() - dobDate.getFullYear();
+      let ageMonths = todayDate.getMonth() - dobDate.getMonth();
+      let ageDays = todayDate.getDate() - dobDate.getDate();
 
-            if (days < 0) {
-                const lastMonth = new Date(todayDate.getFullYear(), todayDate.getMonth() - 1, 0);
-                days += lastMonth.getDate();
-                months--;
-            }
+      if (ageDays < 0) {
+        ageMonths--;
+        const lastMonthDate = new Date(todayDate.getFullYear(), todayDate.getMonth(), 0);
+        ageDays += lastMonthDate.getDate();
+      }
 
-            // Calculate next birthday
-            let nextBirthday = new Date(todayDate.getFullYear(), birthDate.getMonth(), birthDate.getDate());
-            if (nextBirthday < todayDate) {
-                nextBirthday.setFullYear(nextBirthday.getFullYear() + 1);
-            }
+      if (ageMonths < 0) {
+        ageYears--;
+        ageMonths += 12;
+      }
 
-            const diffTime = Math.abs(nextBirthday - todayDate);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            const nextMonths = Math.floor(diffDays / 30);
-            const nextDays = diffDays % 30;
+      // Calculate Next Birthday
+      let nextBirthday = new Date(todayDate.getFullYear(), dobDate.getMonth(), dobDate.getDate());
+      if (nextBirthday < todayDate) {
+        nextBirthday.setFullYear(todayDate.getFullYear() + 1);
+      }
 
-            // Display results
-            document.getElementById('age-result').textContent = 
-                `${years} Years, ${months} Months, ${days} Days`;
-            document.getElementById('next-birthday').textContent = 
-                `${nextMonths} Months, ${nextDays} Days`;
-        }
+      const nextBirthdayDiff = nextBirthday - todayDate;
+      const nextBirthdayDays = Math.floor(nextBirthdayDiff / (1000 * 60 * 60 * 24));
+      const nextBirthdayMonths = Math.floor(nextBirthdayDays / 30);
+      const nextBirthdayYears = Math.floor(nextBirthdayMonths / 12);
 
-        function resetForm() {
-            document.getElementById('today-date').value = formatDate(new Date());
-            document.getElementById('birth-date').value = '';
-            document.getElementById('age-result').textContent = '0 Years, 0 Months, 0 Days';
-            document.getElementById('next-birthday').textContent = '0 Months, 0 Days';
-        }
-    </script>
+      // Display Results
+      document.getElementById('ageResult').innerText = `Your Age: ${ageYears} years, ${ageMonths} months, ${ageDays} days`;
+      document.getElementById('nextBirthdayResult').innerText = `Next Birthday: ${nextBirthdayYears} years, ${nextBirthdayMonths % 12} months, ${nextBirthdayDays % 30} days`;
+    }
+
+    // Reset Form
+    function resetForm() {
+      todayDateInput.value = formatDate(new Date());
+      dobInput.value = '';
+      document.getElementById('ageResult').innerText = '';
+      document.getElementById('nextBirthdayResult').innerText = '';
+    }
+  </script>
 </body>
 </html>
